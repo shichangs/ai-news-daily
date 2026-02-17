@@ -23,4 +23,7 @@ Thumbs.db
 # Env
 .env
 .env.local
+
+# Data (stored locally, not in repo)
+output/
 .venv/

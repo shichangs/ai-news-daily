@@ -32,5 +32,6 @@ OPENAI_BASE_URL = os.environ.get("OPENAI_BASE_URL", "https://api.openai.com/v1")
 OPENAI_MODEL = os.environ.get("OPENAI_MODEL", "gpt-4o-mini")
 LANGUAGE = "zh-CN"           # 摘要语言
 
-# 输出配置
-OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "output")
+# 输出配置 - 数据存本地，不放 GitHub
+DATA_DIR = os.path.expanduser("~/.openclaw/workspace/ai-news-daily-data")
+OUTPUT_DIR = os.path.join(DATA_DIR, "daily")
