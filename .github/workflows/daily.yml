@@ -1,0 +1,42 @@
+name: Daily AI News
+
+on:
+  schedule:
+    # 每天 UTC 01:00 运行（北京时间 09:00）
+    - cron: '0 1 * * *'
+  workflow_dispatch:  # 支持手动触发
+
+permissions:
+  contents: write
+
+jobs:
+  fetch-and-summarize:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run AI News Daily
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_BASE_URL: ${{ secrets.OPENAI_BASE_URL || 'https://api.openai.com/v1' }}
+          OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-4o-mini' }}
+        run: python main.py
+
+      - name: Commit and push results
+        run: |
+          git config user.name "AI News Bot"
+          git config user.email "bot@ai-news-daily.github.io"
+          git add output/
+          git diff --cached --quiet || git commit -m "📰 Daily AI news $(date +%Y-%m-%d)"
+          git push
