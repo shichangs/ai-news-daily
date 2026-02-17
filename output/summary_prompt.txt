@@ -1,0 +1,118 @@
+[1] 标题: Qwen3.5: Towards Native Multimodal Agents
+来源: simonwillison.net
+链接: https://simonwillison.net/2026/Feb/17/qwen35/#atom-everything
+内容: Qwen3.5: Towards Native Multimodal Agents Alibaba's Qwen just released the first two models in the Qwen 3.5 series - one open weights, one proprietary. Both are multi-modal for vision input. The open weight one is a Mixture of Experts model called Qwen3.5-397B-A17B. Interesting to see Qwen call out serving efficiency as a benefit of that architecture: Built on an innovative hybrid architecture that fuses linear attention (via Gated Delta Networks) with a sparse mixture-of-experts, the model attains remarkable inference efficiency: although it comprises 397 billion total parameters, just 17 billion are activated per forward pass, optimizing both speed and cost without sacrificing capability. It's 807GB on Hugging Face , and Unsloth have a collection of smaller GGUFs ranging in size from 94.
+
+---
+[2] 标题: openai-structured-outputs-are-really-useful
+来源: chadnauseam.com
+链接: https://chadnauseam.com/coding/ai/openai-structured-outputs-are-really-useful
+内容: 
+
+---
+[3] 标题: Rodney and Claude Code for Desktop
+来源: simonwillison.net
+链接: https://simonwillison.net/2026/Feb/16/rodney-claude-code/#atom-everything
+内容: I'm a very heavy user of Claude Code on the web , Anthropic's excellent but poorly named cloud version of Claude Code where everything runs in a container environment managed by them, greatly reducing the risk of anything bad happening to a computer I care about. I don't use the web interface at all (hence my dislike of the name) - I access it exclusively through their native iPhone and Mac desktop apps. Something I particularly appreciate about the desktop app is that it lets you see images that Claude is "viewing" via its Read /path/to/image tool. Here's what that looks like: &1 && uvx rodney click "details.nav-menu summary" 2>&1 &% sleep 0.5 && uvx rodney screenshot /tmp/menu.png 2>&1 Output reads: Datasette: test, Clicked, /tmp/menu.png - then it says Read /tmp/menu.png and reveals a s
+
+---
+[4] 标题: I Sold Out for $20 a Month and All I Got Was This Perfectly Generated Terraform
+来源: matduggan.com
+链接: https://matduggan.com/i-sold-out-for-200-a-month-and-all-i-got-was-this-perfectly-generated-terraform/
+内容: Until recently the LLM tools I’ve tried have been, to be frank, worthless. Copilot was best at writing extremely verbose comments. Gemini would turn a 200 line script into a 700 line collection of gibberish. It was easy for me to, more or less, ignore LLMs for being the same over-hyped nonsense as the Metaverse and NFTs. This is great for me because I understand that LLMs represent a massive shift in power from an already weakened worker class to an increasingly monarch-level wealthy class. By stealing all human knowledge and paying nothing for it, then selling the output of that knowledge, LLMs are an impossibly unethical tool. So if the energy wasting tool of the tech executive class is also a terrible tool, easy choice. Like boycotting Tesla for being owned by an evil person and also be
+
+---
+[5] 标题: LLM-generated skills work, if you generate them afterwards
+来源: seangoedecke.com
+链接: https://seangoedecke.com/generate-skills-afterwards/
+内容: LLM “skills” are a short explanatory prompt for a particular task, typically bundled with helper scripts. A recent paper showed that while skills are useful to LLMs, LLM-authored skills are not. From the abstract: Self-generated skills provide no benefit on average, showing that models cannot reliably author the procedural knowledge they benefit from consuming For the moment, I don’t really want to dive into the paper. I just want to note that the way the paper uses LLMs to generate skills is bad, and you shouldn’t do this. Here’s how the paper prompts a LLM to produce skills: Before attempting to solve this task, please follow these steps: 1. Analyze the task requirements and identify what domain knowledge, APIs, or techniques are needed. 2. Write 1–5 modular skill documents that would he
+
+---
+[6] 标题: AI is destroying Open Source, and it's not even good yet
+来源: jeffgeerling.com
+链接: https://www.jeffgeerling.com/blog/2026/ai-is-destroying-open-source/
+内容: Over the weekend Ars Technica retracted an article because the AI a writer used hallucinated quotes from an open source library maintainer. The irony here is the maintainer in question, Scott Shambaugh, was harassed by someone's AI agent over not merging it's AI slop code. It's likely the bot was running through someone's local 'agentic AI' instance (likely using OpenClaw). The guy who built OpenClaw was just hired by OpenAI to "work on bringing agents to everyone." You'll have to forgive me if I'm not enthusastic about that.
+
+---
+[7] 标题: Anthropic's 500 vulns are the tip of the iceberg
+来源: martinalderson.com
+链接: https://martinalderson.com/posts/anthropic-found-500-zero-days/?utm_source=rss
+内容: Anthropic's red team found 500+ critical vulnerabilities with Claude. But they focused on maintained software. The scarier problem is the long tail that nobody will ever patch.
+
+---
+[8] 标题: Nano Banana Pro diff to webcomic
+来源: simonwillison.net
+链接: https://simonwillison.net/2026/Feb/17/release-notes-webcomic/#atom-everything
+内容: Given the threat of cognitive debt brought on by AI-accelerated software development leading to more projects and less deep understanding of how they work and what they actually do, it's interesting to consider artifacts that might be able to help. Nathan Baschez on Twitter : my current favorite trick for reducing "cognitive debt" (h/t @simonw ) is to ask the LLM to write two versions of the plan: The version for it (highly technical and detailed) The version for me (an entertaining essay designed to build my intuition) Works great This inspired me to try something new. I generated the diff between v0.5.0 and v0.6.0 of my Showboat project - which introduced the remote publishing feature - and dumped that into Nano Banana Pro with the prompt: Create a webcomic that explains the new feature 
+
+---
+[9] 标题: Two new Showboat tools: Chartroom and datasette-showboat
+来源: simonwillison.net
+链接: https://simonwillison.net/2026/Feb/17/chartroom-and-datasette-showboat/#atom-everything
+内容: I introduced Showboat a week ago - my CLI tool that helps coding agents create Markdown documents that demonstrate the code that they have created. I've been finding new ways to use it on a daily basis, and I've just released two new tools to help get the best out of the Showboat pattern. Chartroom is a CLI charting tool that works well with Showboat, and datasette-showboat lets Showboat's new remote publishing feature incrementally push documents to a Datasette instance. Showboat remote publishing datasette-showboat Chartroom How I built Chartroom The burgeoning Showboat ecosystem Showboat remote publishing I normally use Showboat in Claude Code for web (see note from this morning ). I've used it in several different projects in the past few days, each of them with a prompt that looks som
+
+---
+[10] 标题: semaglutide-has-changed-the-world
+来源: chadnauseam.com
+链接: https://chadnauseam.com/random/semaglutide-has-changed-the-world
+内容: 
+
+---
+[11] 标题: levers-in-the-brain
+来源: chadnauseam.com
+链接: https://chadnauseam.com/coding/random/levers-in-the-brain
+内容: 
+
+---
+[12] 标题: Superlinear Returns
+来源: paulgraham.com
+链接: http://www.paulgraham.com/superlinear.html
+内容: 
+
+---
+[13] 标题: Billionaires Build
+来源: paulgraham.com
+链接: http://www.paulgraham.com/ace.html
+内容: 
+
+---
+[14] 标题: The Airbnbs
+来源: paulgraham.com
+链接: http://www.paulgraham.com/airbnbs.html
+内容: 
+
+---
+[15] 标题: Early Work
+来源: paulgraham.com
+链接: http://www.paulgraham.com/early.html
+内容: 
+
+---
+[16] 标题: The Refragmentation
+来源: paulgraham.com
+链接: http://www.paulgraham.com/re.html
+内容: 
+
+---
+[17] 标题: What Microsoft Is this the Altair Basic of?
+来源: paulgraham.com
+链接: http://www.paulgraham.com/altair.html
+内容: 
+
+---
+[18] 标题: How to Be an Expert in a Changing World
+来源: paulgraham.com
+链接: http://www.paulgraham.com/ecw.html
+内容: 
+
+---
+[19] 标题: Mean People Fail
+来源: paulgraham.com
+链接: http://www.paulgraham.com/mean.html
+内容: 
+
+---
+[20] 标题: How to Raise Money
+来源: paulgraham.com
+链接: http://www.paulgraham.com/fr.html
+内容: 

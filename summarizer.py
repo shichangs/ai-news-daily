@@ -1,8 +1,8 @@
-"""LLM 摘要生成模块"""
+"""LLM 摘要生成模块 - Agent 模式（由狗蛋直接生成摘要）"""
 import json
 import re
 import html
-from openai import OpenAI
+import os
 
 from rss_fetcher import Article
 import config
@@ -16,85 +16,44 @@ def _clean_html(text: str) -> str:
     return text
 
 
-def _build_article_text(article: Article) -> str:
-    """构建用于 LLM 的文章文本"""
-    content = _clean_html(article.content or article.summary)
-    return f"标题: {article.title}\n来源: {article.source}\n链接: {article.link}\n内容: {content[:1500]}"
+def summarize_articles_fallback(articles: list[Article]) -> list[Article]:
+    """无 LLM 时的 fallback 摘要：清洗原始摘要"""
+    for article in articles:
+        cleaned = _clean_html(article.summary or article.content)
+        article.ai_summary = cleaned[:300] if cleaned else "暂无摘要"
+    return articles
 
 
-def summarize_articles(articles: list[Article]) -> list[Article]:
-    """使用 LLM 为文章列表生成中文摘要"""
-    if not config.OPENAI_API_KEY:
-        print("⚠️  未设置 OPENAI_API_KEY，跳过 AI 摘要，使用原始摘要")
-        for article in articles:
-            article.ai_summary = _clean_html(article.summary)[:200] if article.summary else "暂无摘要"
-        return articles
+def build_summary_prompt(articles: list[Article]) -> str:
+    """构建给 Agent 的摘要 prompt，返回纯文本"""
+    lines = []
+    for i, a in enumerate(articles, 1):
+        content = _clean_html(a.content or a.summary)[:800]
+        lines.append(f"[{i}] 标题: {a.title}\n来源: {a.source}\n链接: {a.link}\n内容: {content}\n")
+    return "\n---\n".join(lines)
 
-    client = OpenAI(
-        api_key=config.OPENAI_API_KEY,
-        base_url=config.OPENAI_BASE_URL,
-    )
 
-    print(f"🤖 正在使用 {config.OPENAI_MODEL} 生成中文摘要...")
+def parse_agent_summaries(text: str, articles: list[Article]) -> list[Article]:
+    """解析 Agent 返回的摘要文本，填充到 articles"""
+    # 尝试按编号解析: "1. xxx" 或 "[1] xxx"
+    pattern = r'(?:^|\n)\s*(?:\[?\d+\]?[\.\):\s]+)(.+?)(?=\n\s*(?:\[?\d+\]?[\.\):\s]+)|\Z)'
+    matches = re.findall(pattern, text, re.DOTALL)
 
-    # 分批处理，每批 5 篇
-    batch_size = 5
-    for i in range(0, len(articles), batch_size):
-        batch = articles[i:i + batch_size]
-        batch_text = "\n\n---\n\n".join(
-            f"[文章 {j+1}]\n{_build_article_text(a)}"
-            for j, a in enumerate(batch)
-        )
-
-        try:
-            response = client.chat.completions.create(
-                model=config.OPENAI_MODEL,
-                messages=[
-                    {
-                        "role": "system",
-                        "content": (
-                            "你是一个专业的科技新闻编辑。请为以下每篇文章写一段简洁的中文摘要（2-3句话），"
-                            "突出核心要点和技术亮点。\n\n"
-                            "请以 JSON 数组格式返回，每个元素包含 index（从1开始）和 summary 字段。\n"
-                            "示例: [{\"index\": 1, \"summary\": \"摘要内容\"}, ...]"
-                        )
-                    },
-                    {
-                        "role": "user",
-                        "content": batch_text,
-                    }
-                ],
-                temperature=0.3,
-                max_tokens=2000,
-            )
-
-            result_text = response.choices[0].message.content.strip()
-
-            # 提取 JSON
-            json_match = re.search(r'\[.*\]', result_text, re.DOTALL)
-            if json_match:
-                summaries = json.loads(json_match.group())
-                for item in summaries:
-                    idx = item.get("index", 0) - 1
-                    if 0 <= idx < len(batch):
-                        batch[idx].ai_summary = item.get("summary", "")
+    if matches and len(matches) >= len(articles):
+        for i, article in enumerate(articles):
+            article.ai_summary = matches[i].strip()
+    else:
+        # fallback: 整体按段落分割
+        paragraphs = [p.strip() for p in text.split("\n\n") if p.strip()]
+        for i, article in enumerate(articles):
+            if i < len(paragraphs):
+                article.ai_summary = paragraphs[i].strip()
             else:
-                # fallback: 用整段作为第一篇的摘要
-                for a in batch:
-                    if not a.ai_summary:
-                        a.ai_summary = _clean_html(a.summary)[:200] or "暂无摘要"
+                article.ai_summary = _clean_html(article.summary)[:300] or "暂无摘要"
 
-        except Exception as e:
-            print(f"⚠️  LLM 调用失败: {e}")
-            for a in batch:
-                if not a.ai_summary:
-                    a.ai_summary = _clean_html(a.summary)[:200] or "暂无摘要"
-
-        print(f"  ✅ 已处理 {min(i + batch_size, len(articles))}/{len(articles)} 篇")
-
-    # 确保所有文章都有摘要
+    # 确保每篇都有摘要
     for a in articles:
         if not a.ai_summary:
-            a.ai_summary = _clean_html(a.summary)[:200] or "暂无摘要"
+            a.ai_summary = _clean_html(a.summary)[:300] or "暂无摘要"
 
     return articles
