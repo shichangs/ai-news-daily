@@ -40,21 +40,21 @@
 内容: 
 
 ---
-[8] 标题: The Airbnbs
+[8] 标题: Billionaires Build
+来源: paulgraham.com
+链接: http://www.paulgraham.com/ace.html
+内容: 
+
+---
+[9] 标题: The Airbnbs
 来源: paulgraham.com
 链接: http://www.paulgraham.com/airbnbs.html
 内容: 
 
 ---
-[9] 标题: Early Work
+[10] 标题: Early Work
 来源: paulgraham.com
 链接: http://www.paulgraham.com/early.html
-内容: 
-
----
-[10] 标题: Billionaires Build
-来源: paulgraham.com
-链接: http://www.paulgraham.com/ace.html
 内容: 
 
 ---
