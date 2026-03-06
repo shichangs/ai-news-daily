@@ -31,12 +31,15 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_BASE_URL: ${{ secrets.OPENAI_BASE_URL || 'https://api.openai.com/v1' }}
           OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-4o-mini' }}
-        run: python main.py
+          AI_NEWS_OUTPUT_DIR: output
+        run: |
+          mkdir -p output
+          python main.py
 
       - name: Commit and push results
         run: |
           git config user.name "AI News Bot"
           git config user.email "bot@ai-news-daily.github.io"
-          git add output/
+          git add -A output
           git diff --cached --quiet || git commit -m "📰 Daily AI news $(date +%Y-%m-%d)"
           git push
